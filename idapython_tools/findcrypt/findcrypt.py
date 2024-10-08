@@ -1,5 +1,5 @@
 import struct, copy
-import idc, idautils, ida_name, ida_bytes, ida_ua
+import idc, idautils, ida_name, ida_bytes, ida_ua, ida_search
 from consts import non_sparse_consts, sparse_consts, operand_consts
 
 if 'g_fc_prefix_cmt' not in globals():
@@ -109,7 +109,7 @@ def main():
                     if insn.ops[i].type == ida_ua.o_imm:
                         imm_operands.append(insn.ops[i].value)
                 if len(imm_operands) == 0:
-                    ea = idc.find_code(ea, idc.SEARCH_DOWN)
+                    ea = idc.find_code(ea, ida_search.SEARCH_DOWN)
                     continue
                 for const in operand_consts:
                     if const["value"] in imm_operands:
@@ -120,7 +120,7 @@ def main():
                         else:
                             idc.set_cmt(ea, g_fc_prefix_cmt + const["name"], 0)
                         break
-                ea = idc.find_code(ea, idc.SEARCH_DOWN)
+                ea = idc.find_code(ea, ida_search.SEARCH_DOWN)
     print("[*] finished")
 
 if __name__ == '__main__':
